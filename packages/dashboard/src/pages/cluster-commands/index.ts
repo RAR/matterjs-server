@@ -31,6 +31,7 @@ import "./clusters/closure-control-commands.js";
 import "./clusters/closure-dimension-commands.js";
 import "./clusters/commodity-tariff-commands.js";
 import "./clusters/door-lock-commands.js";
+import "./clusters/energy-evse-commands.js";
 import "./clusters/icd-management-commands.js";
 import "./clusters/level-control-commands.js";
 import "./clusters/media-playback-commands.js";
