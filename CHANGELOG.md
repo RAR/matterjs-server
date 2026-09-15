@@ -9,6 +9,7 @@ This page shows a detailed overview of the changes between versions without the 
 
 ## **WORK IN PROGRESS**
 
+- Enhancement: (lboue) Dashboard Endpoints list and endpoint's Clusters panel show each endpoint's resolved label and Descriptor semantic tags (TagList) to simplify identification
 - Enhancement: (lboue) Added a command panel for the DoorLock cluster to the Dashboard
 - Enhancement: (lboue) Added Presets and Thermostat Suggestions panels to Dashboard
 - Enhancement: (lboue) Added a command panel for the DeviceEnergyManagementMode cluster to the Dashboard
