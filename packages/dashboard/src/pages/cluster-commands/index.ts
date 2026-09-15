@@ -30,6 +30,7 @@ import "./clusters/chime-commands.js";
 import "./clusters/closure-control-commands.js";
 import "./clusters/closure-dimension-commands.js";
 import "./clusters/commodity-tariff-commands.js";
+import "./clusters/device-energy-management-commands.js";
 import "./clusters/door-lock-commands.js";
 import "./clusters/energy-evse-commands.js";
 import "./clusters/icd-management-commands.js";
