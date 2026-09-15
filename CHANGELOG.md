@@ -9,6 +9,9 @@ This page shows a detailed overview of the changes between versions without the 
 
 ## **WORK IN PROGRESS**
 
+- Enhancement: (lboue) Added a command panel for the DoorLock cluster to the Dashboard
+- Enhancement: (lboue) Added Presets and Thermostat Suggestions panels to Dashboard
+- Enhancement: (lboue) Added a command panel for the DeviceEnergyManagementMode cluster to the Dashboard
 - Enhancement: (lboue) Added a Forecast panel for the DeviceEnergyManagement cluster to the Dashboard
 - Enhancement: (lboue) Added a command panel for the MediaPlayback cluster to the Dashboard
 - Enhancement: (lboue) Added a command panel for the ClosureDimension cluster to the Dashboard
