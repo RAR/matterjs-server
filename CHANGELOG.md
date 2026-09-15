@@ -9,6 +9,7 @@ This page shows a detailed overview of the changes between versions without the 
 
 ## **WORK IN PROGRESS**
 
+- Enhancement: Adds CLI flag `--custom-cluster-poll-interval` (env `CUSTOM_CLUSTER_POLL_INTERVAL`) to configure the polling interval for custom cluster attributes without subscription support (legacy Eve Energy devices); defaults to the previous 60 seconds and accepts 60 to 86400 seconds
 - Enhancement: (lboue) Dashboard Endpoints list and endpoint's Clusters panel show each endpoint's resolved label and Descriptor semantic tags (TagList) to simplify identification
 - Enhancement: (lboue) Added a command panel for the DoorLock cluster to the Dashboard
 - Enhancement: (lboue) Added Presets and Thermostat Suggestions panels to Dashboard
