@@ -189,3 +189,16 @@ def test_wago_window_covering_extension_attributes_exist() -> None:
     assert tags["wagoTravelTimeUp"] == 0x15340001
     assert tags["wagoTravelTimeDown"] == 0x15340002
     assert tags["wagoSlatRotationTime"] == 0x15340003
+
+
+def test_signed_custom_cluster_attributes():
+    """int32 attributes of decorator-defined clusters are generated as signed ints."""
+    from matter_server.common.custom_clusters import (
+        DraftElectricalMeasurementCluster,
+        ThirdRealityMeteringCluster,
+    )
+
+    demand = ThirdRealityMeteringCluster.Attributes.InstantaneousDemand
+    assert demand.attribute_type.Type == (int | None)
+    power = DraftElectricalMeasurementCluster.Attributes.ActivePower
+    assert power.attribute_type.Type == (int | None)
