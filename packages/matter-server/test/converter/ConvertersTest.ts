@@ -4,6 +4,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+// Registers the custom cluster models before the ClusterMap is built
+import "@matter-server/custom-clusters";
 import {
     ClusterMap,
     GlobalAttributes,
@@ -1228,6 +1230,43 @@ describe("Converters", () => {
 
             expect(result.groupKeySet.groupKeySetID).to.equal(5);
             expect(result.groupKeySet.groupKeySetId).to.equal(5);
+        });
+    });
+
+    describe("convertCommandDataToMatter - decorator-defined custom clusters", () => {
+        it("should convert a list of structs with base64 bytes for the Aqara SetZones command", () => {
+            const aqaraCluster = ClusterMap[0x115ffc0a]!;
+            const setZonesCmd = aqaraCluster.commands["setzones"]!;
+            const cells = new Uint8Array(40);
+            cells[11] = 0xc0;
+
+            const result = convertCommandDataToMatter(
+                { zones: [{ zoneId: 1, zoneType: 0, cells: Bytes.toBase64(cells), enabled: true }] },
+                setZonesCmd,
+                aqaraCluster.model,
+            ) as { zones: { zoneId: number; cells: Uint8Array; enabled: boolean }[] };
+
+            expect(result.zones).to.have.length(1);
+            expect(result.zones[0].zoneId).to.equal(1);
+            expect(result.zones[0].enabled).to.equal(true);
+            expect(Bytes.areEqual(result.zones[0].cells, cells)).to.equal(true);
+        });
+
+        it("should convert the bytes inside the Aqara zones attribute list to base64", () => {
+            const aqaraCluster = ClusterMap[0x115ffc0a]!;
+            const zonesAttr = aqaraCluster.attributes[0x10]!;
+            const cells = new Uint8Array(40);
+            cells[11] = 0xc0;
+
+            const result = convertMatterToWebSocketNameBased(
+                [{ zoneId: 1, zoneType: 0, cells, enabled: true }],
+                zonesAttr,
+                aqaraCluster.model,
+            ) as { zoneId: number; cells: string; enabled: boolean }[];
+
+            expect(result).to.have.length(1);
+            expect(result[0].zoneId).to.equal(1);
+            expect(result[0].cells).to.equal(Bytes.toBase64(cells));
         });
     });
 });
