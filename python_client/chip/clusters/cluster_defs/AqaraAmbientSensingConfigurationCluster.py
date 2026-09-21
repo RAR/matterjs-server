@@ -38,7 +38,6 @@ class AqaraAmbientSensingConfigurationCluster(Cluster):
                 ClusterObjectFieldDescriptor(Label="edgeRegionBitmask", Tag=0x00000014, Type=typing.Optional[bytes]),
                 ClusterObjectFieldDescriptor(Label="learningReportingTimeout", Tag=0x00000016, Type=typing.Optional[uint]),
                 ClusterObjectFieldDescriptor(Label="enableHumanCountDetection", Tag=0x00000023, Type=typing.Optional[bool]),
-                ClusterObjectFieldDescriptor(Label="enableActivityDetection", Tag=0x00000027, Type=typing.Optional[bool]),
                 ClusterObjectFieldDescriptor(Label="enableAiHighPrecisionRecognition", Tag=0x00000029, Type=typing.Optional[bool]),
                 ClusterObjectFieldDescriptor(Label="enableAiAdaptiveSensitivity", Tag=0x0000002A, Type=typing.Optional[bool]),
                 ClusterObjectFieldDescriptor(Label="enableAiEntryExitRegionRecognition", Tag=0x0000002B, Type=typing.Optional[bool]),
@@ -69,7 +68,6 @@ class AqaraAmbientSensingConfigurationCluster(Cluster):
     edgeRegionBitmask: typing.Optional[bytes] = None
     learningReportingTimeout: typing.Optional[uint] = None
     enableHumanCountDetection: typing.Optional[bool] = None
-    enableActivityDetection: typing.Optional[bool] = None
     enableAiHighPrecisionRecognition: typing.Optional[bool] = None
     enableAiAdaptiveSensitivity: typing.Optional[bool] = None
     enableAiEntryExitRegionRecognition: typing.Optional[bool] = None
@@ -538,22 +536,6 @@ class AqaraAmbientSensingConfigurationCluster(Cluster):
             @ChipUtility.classproperty
             def attribute_id(cls) -> int:
                 return 0x00000023
-
-            @ChipUtility.classproperty
-            def attribute_type(cls) -> ClusterObjectFieldDescriptor:
-                return ClusterObjectFieldDescriptor(Type=typing.Optional[bool])
-
-            value: typing.Optional[bool] = None
-
-        @dataclass
-        class EnableActivityDetection(ClusterAttributeDescriptor):
-            @ChipUtility.classproperty
-            def cluster_id(cls) -> int:
-                return 0x115FFC0A
-
-            @ChipUtility.classproperty
-            def attribute_id(cls) -> int:
-                return 0x00000027
 
             @ChipUtility.classproperty
             def attribute_type(cls) -> ClusterObjectFieldDescriptor:

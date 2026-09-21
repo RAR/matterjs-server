@@ -23,7 +23,10 @@ import {
 
 // Vendor clusters of the Aqara Spatial Multi-Sensor FP400 (vendor 0x115f / 4447, product 0x2009) in Matter/Thread
 // mode. Attribute, command and event names follow the trait names of the Aqara app's device model
-// (AmbientSensingConfiguration / RadarSensingUnion / OccupantLocation). Values were verified against firmware 1.1.8.2.
+// (AmbientSensingConfiguration / RadarSensingUnion / OccupantLocation); the Aqara app's user interface shows
+// friendlier display labels for some of these (e.g. CoordinateReverse is shown as "Mounting Direction Detection",
+// EdgeRegionBitmask as "Monitoring Range"). Attribute ids, enum values and behaviour were verified against
+// firmware 1.1.8.2 and 1.1.9.6 by driving the Aqara app and reading the clusters back.
 //
 // The sensor divides its field of view into a grid of 16 columns x 20 rows of ~50 cm cells. Cell (row, col) maps to
 // bit `row * 16 + col` of a 40 byte bitmask, most significant bit first. Row 0 is nearest the sensor, column 8 is
@@ -42,7 +45,7 @@ class AqaraZoneStruct {
     @field(0x0, uint8)
     zoneId!: number;
 
-    /** Purpose not known; 0 works. */
+    /** Zone category chosen in the app (e.g. 51 for a desk zone); 0 works as a generic zone. */
     @field(0x1, uint8)
     zoneType!: number;
 
@@ -137,7 +140,7 @@ export class AqaraAmbientSensingConfigurationCluster {
     @attribute(0x0013, octstr)
     interferenceRegionBitmask?: Bytes;
 
-    /** Cells recognised as room edges (40 byte bitmask). */
+    /** Monitored-area boundary (40 byte bitmask); shown as "Monitoring Range" in the app. */
     @attribute(0x0014, octstr)
     edgeRegionBitmask?: Bytes;
 
@@ -148,11 +151,8 @@ export class AqaraAmbientSensingConfigurationCluster {
     @attribute(0x0023, bool, writable)
     enableHumanCountDetection?: boolean;
 
-    // The names of attributes 0x27..0x2c are inferred from the Aqara app's cached device model by matching values and
-    // have not been confirmed individually.
-    @attribute(0x0027, bool, writable)
-    enableActivityDetection?: boolean;
-
+    // Attribute 0x27 (EnableActivityDetection) exists in the app's device model but is not exposed by firmware
+    // 1.1.9.6 (absent from the AttributeList), so it is not declared here.
     @attribute(0x0029, bool, writable)
     enableAiHighPrecisionRecognition?: boolean;
 
@@ -255,10 +255,11 @@ class AqaraTargetStruct {
     @field(0x3, uint16)
     cell!: number;
 
-    /** 1 = active, 2 = still. */
+    /** 0 = unknown, 1 = active, 2 = still. */
     @field(0x4, uint8)
     activityState!: number;
 
+    /** 0 = cleared, 1 = fall, 2 = suspected fall. */
     @field(0x5, uint8)
     fallState!: number;
 

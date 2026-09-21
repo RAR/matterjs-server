@@ -18369,13 +18369,6 @@ export const clusters: Record<number, ClusterDescription> = {
                 "type": "Optional[bool]",
                 "writable": true
             },
-            "39": {
-                "id": 39,
-                "cluster_id": 291503114,
-                "label": "EnableActivityDetection",
-                "type": "Optional[bool]",
-                "writable": true
-            },
             "41": {
                 "id": 41,
                 "cluster_id": 291503114,
