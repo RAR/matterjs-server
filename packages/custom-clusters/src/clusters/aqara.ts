@@ -215,15 +215,15 @@ export class AqaraAmbientSensingConfigurationCluster {
     maxZones?: number;
 
     /** Cells recognised as entry/exit regions (40 byte bitmask). */
-    @attribute(0x0012, octstr)
+    @attribute(0x0012, octstr, writable)
     entryExitRegionBitmask?: Bytes;
 
     /** Cells recognised as interference sources (40 byte bitmask). */
-    @attribute(0x0013, octstr)
+    @attribute(0x0013, octstr, writable)
     interferenceRegionBitmask?: Bytes;
 
     /** Monitored-area boundary (40 byte bitmask); shown as "Monitoring Range" in the app. */
-    @attribute(0x0014, octstr)
+    @attribute(0x0014, octstr, writable)
     edgeRegionBitmask?: Bytes;
 
     /** Seconds; reporting timeout of the AI space background learning. */
