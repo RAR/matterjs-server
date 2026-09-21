@@ -1240,14 +1240,17 @@ describe("Converters", () => {
             const cells = new Uint8Array(40);
             cells[11] = 0xc0;
 
+            // The generated Python client spells the field `zoneID` (the matter.js model says `zoneId`);
+            // the converter must accept the Python spelling and produce the matter.js one.
             const result = convertCommandDataToMatter(
-                { zones: [{ zoneId: 1, zoneType: 0, cells: Bytes.toBase64(cells), enabled: true }] },
+                { zones: [{ zoneID: 1, zoneType: 0, cells: Bytes.toBase64(cells), enabled: true }] },
                 setZonesCmd,
                 aqaraCluster.model,
-            ) as { zones: { zoneId: number; cells: Uint8Array; enabled: boolean }[] };
+            ) as { zones: { zoneId: number; zoneID?: number; cells: Uint8Array; enabled: boolean }[] };
 
             expect(result.zones).to.have.length(1);
             expect(result.zones[0].zoneId).to.equal(1);
+            expect(result.zones[0].zoneID).to.equal(undefined);
             expect(result.zones[0].enabled).to.equal(true);
             expect(Bytes.areEqual(result.zones[0].cells, cells)).to.equal(true);
         });
