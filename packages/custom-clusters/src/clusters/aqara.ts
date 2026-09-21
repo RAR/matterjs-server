@@ -10,6 +10,7 @@ import {
     bool,
     cluster,
     command,
+    enum8,
     event,
     field,
     int16,
@@ -20,6 +21,94 @@ import {
     uint16,
     writable,
 } from "@matter/main/model";
+
+// Enumerations. Declared as `const enum`s so the wire encoding stays a plain 8-bit value while the symbolic mapping
+// lives alongside the cluster. Names and integer values follow the Aqara app's device model (trait definitions);
+// values were confirmed against firmware 1.1.9.6.
+
+/** {@link AqaraAmbientSensingConfigurationCluster.installMode} values (InstallMode trait). */
+const enum AqaraInstallMode {
+    Unknown = 0,
+    SideMount = 1, // shown as "Wall" in the app
+    TopMount = 2, // shown as "Ceiling" in the app
+}
+
+/** {@link AqaraAmbientSensingConfigurationCluster.sideInstall} values (SideInstall trait). */
+const enum AqaraSideInstall {
+    Unknown = 0,
+    Wall = 1,
+    LeftCorner = 2,
+    RightCorner = 3,
+}
+
+/** {@link AqaraAmbientSensingConfigurationCluster.installStatus} values (InstallStatus trait, from the tilt sensor). */
+const enum AqaraInstallStatus {
+    LevelFacingUp = 0,
+    LevelTiltedFacingUp = 1,
+    LevelReverseTiltedFacingUp = 2,
+    SideFacingForward = 3,
+    SideReverseFacingForward = 4,
+    TopFacingDown = 5,
+    TiltedFacingDown = 6,
+    ReverseTiltedFacingDown = 7,
+    Invalid = 8,
+}
+
+/** {@link AqaraAmbientSensingConfigurationCluster.coordinateReverse} values; shown as "Mounting Direction Detection". */
+const enum AqaraCoordinateReverse {
+    Disabled = 0,
+    Enabled = 1,
+    Auto = 2,
+}
+
+/** {@link AqaraAmbientSensingConfigurationCluster.detectionDirection} values (DetectionDirectionSetting trait). */
+const enum AqaraDetectionDirection {
+    OmniDirectional = 0,
+    LeftRight = 1,
+}
+
+/** {@link AqaraAmbientSensingConfigurationCluster.proximityDistanceLevel} values (ProximityDistanceLevel trait). */
+const enum AqaraProximityDistanceLevel {
+    Far = 0,
+    Medium = 1,
+    Near = 2,
+}
+
+/** Activity of a tracked target (ActivityState trait). */
+const enum AqaraActivityState {
+    Unknown = 0,
+    Active = 1,
+    Still = 2,
+}
+
+/** Fall state of a tracked target (FallState trait). */
+const enum AqaraFallState {
+    Cleared = 0,
+    Fall = 1,
+    SuspectedFall = 2,
+}
+
+/** {@link AqaraMotionDetectedEvent.motion} values (MotionDetected trait). */
+const enum AqaraMotionEvent {
+    Enter = 0,
+    Left = 1,
+    LeftIn = 2,
+    RightOut = 3,
+    RightIn = 4,
+    LeftOut = 5,
+    Access = 6,
+    Away = 7,
+}
+
+/** {@link AqaraZoneResponse.status} values (AISpaceBackgroundLearningComplete trait). */
+const enum AqaraZoneCommandStatus {
+    Success = 0,
+    InvalidArgument = 1,
+    InvalidState = 2,
+    ResourceExhausted = 3,
+    Busy = 4,
+    DuplicateZoneId = 5,
+}
 
 // Vendor clusters of the Aqara Spatial Multi-Sensor FP400 (vendor 0x115f / 4447, product 0x2009) in Matter/Thread
 // mode. Attribute, command and event names follow the trait names of the Aqara app's device model
@@ -78,30 +167,27 @@ class AqaraTimeoutRequest {
     timeout!: number;
 }
 
-/**
- * Result of a zone command: 0 = success, 1 = invalid argument, 2 = invalid state, 3 = resource exhausted, 4 = busy,
- * 5 = duplicate zone id.
- */
+/** Result of a zone command; see {@link AqaraZoneCommandStatus}. */
 class AqaraZoneResponse {
-    @field(0x0, uint8)
-    status!: number;
+    @field(0x0, enum8)
+    status!: AqaraZoneCommandStatus;
 }
 
 @cluster(0x115ffc0a)
 export class AqaraAmbientSensingConfigurationCluster {
-    /** 0 = unknown, 1 = side (wall) mount, 2 = top (ceiling) mount. */
-    @attribute(0x0000, uint8, writable)
-    installMode?: number;
+    /** Mounting mode; see {@link AqaraInstallMode}. */
+    @attribute(0x0000, enum8, writable)
+    installMode?: AqaraInstallMode;
 
-    @attribute(0x0001, listOf(uint8))
-    supportedInstallModes?: number[];
+    @attribute(0x0001, listOf(enum8))
+    supportedInstallModes?: AqaraInstallMode[];
 
-    /** 0 = unknown, 1 = wall, 2 = left corner, 3 = right corner. */
-    @attribute(0x0002, uint8, writable)
-    sideInstall?: number;
+    /** Mounting orientation; see {@link AqaraSideInstall}. */
+    @attribute(0x0002, enum8, writable)
+    sideInstall?: AqaraSideInstall;
 
-    @attribute(0x0003, listOf(uint8))
-    supportedSideInstalls?: number[];
+    @attribute(0x0003, listOf(enum8))
+    supportedSideInstalls?: AqaraSideInstall[];
 
     /** Mounting height in mm, between installHeightMin and installHeightMax. */
     @attribute(0x0004, uint16, writable)
@@ -113,13 +199,9 @@ export class AqaraAmbientSensingConfigurationCluster {
     @attribute(0x0006, uint16)
     installHeightMax?: number;
 
-    /**
-     * Orientation measured by the built-in tilt sensor: 0 = level facing up, 1 = level tilted facing up,
-     * 2 = level reverse tilted facing up, 3 = side facing forward, 4 = side reverse facing forward,
-     * 5 = top facing down, 6 = tilted facing down, 7 = reverse tilted facing down, 8 = invalid.
-     */
-    @attribute(0x0007, uint8)
-    installStatus?: number;
+    /** Orientation measured by the built-in tilt sensor; see {@link AqaraInstallStatus}. */
+    @attribute(0x0007, enum8)
+    installStatus?: AqaraInstallStatus;
 
     /** Tilt from horizontal in degrees (unsigned). */
     @attribute(0x0008, uint8)
@@ -165,17 +247,17 @@ export class AqaraAmbientSensingConfigurationCluster {
     @attribute(0x002c, bool, writable)
     enableAiInterferenceSourceRecognition?: boolean;
 
-    /** 0 = disabled, 1 = enabled, 2 = auto. */
-    @attribute(0x002d, uint8, writable)
-    coordinateReverse?: number;
+    /** See {@link AqaraCoordinateReverse}; shown as "Mounting Direction Detection" in the app. */
+    @attribute(0x002d, enum8, writable)
+    coordinateReverse?: AqaraCoordinateReverse;
 
-    /** 0 = omnidirectional, 1 = left/right. */
-    @attribute(0x002e, uint8, writable)
-    detectionDirection?: number;
+    /** See {@link AqaraDetectionDirection}. */
+    @attribute(0x002e, enum8, writable)
+    detectionDirection?: AqaraDetectionDirection;
 
-    /** 0 = far, 1 = medium, 2 = near. */
-    @attribute(0x002f, uint8, writable)
-    proximityDistanceLevel?: number;
+    /** See {@link AqaraProximityDistanceLevel}. */
+    @attribute(0x002f, enum8, writable)
+    proximityDistanceLevel?: AqaraProximityDistanceLevel;
 
     @command(0x00)
     subscribeAutoInterferenceSourceRecognitionData(): void {}
@@ -212,13 +294,10 @@ export class AqaraAmbientSensingConfigurationCluster {
     }
 }
 
-/**
- * Motion event payload: 0 = enter, 1 = left, 2 = left in, 3 = right out, 4 = right in, 5 = left out, 6 = access,
- * 7 = away.
- */
+/** Motion event payload; see {@link AqaraMotionEvent}. */
 class AqaraMotionDetectedEvent {
-    @field(0x0, uint8)
-    motion!: number;
+    @field(0x0, enum8)
+    motion!: AqaraMotionEvent;
 }
 
 @cluster(0x115ffc0b)
@@ -255,13 +334,13 @@ class AqaraTargetStruct {
     @field(0x3, uint16)
     cell!: number;
 
-    /** 0 = unknown, 1 = active, 2 = still. */
-    @field(0x4, uint8)
-    activityState!: number;
+    /** See {@link AqaraActivityState}. */
+    @field(0x4, enum8)
+    activityState!: AqaraActivityState;
 
-    /** 0 = cleared, 1 = fall, 2 = suspected fall. */
-    @field(0x5, uint8)
-    fallState!: number;
+    /** See {@link AqaraFallState}. */
+    @field(0x5, enum8)
+    fallState!: AqaraFallState;
 
     @field(0x6, uint8)
     postureState!: number;
@@ -290,9 +369,9 @@ export class AqaraOccupantLocationCluster {
     @attribute(0x0000, uint8)
     maxDetectionTargets?: number;
 
-    /** 0 = unknown, 1 = active, 2 = still. */
-    @attribute(0x0007, uint8)
-    activityState?: number;
+    /** See {@link AqaraActivityState}. */
+    @attribute(0x0007, enum8)
+    activityState?: AqaraActivityState;
 
     /**
      * Streams {@link locationInfo} events (~7 per second while people move) for the given number of seconds
