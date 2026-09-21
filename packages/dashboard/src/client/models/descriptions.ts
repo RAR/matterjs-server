@@ -18339,21 +18339,21 @@ export const clusters: Record<number, ClusterDescription> = {
                 "cluster_id": 291503114,
                 "label": "EntryExitRegionBitmask",
                 "type": "Optional[bytes]",
-                "writable": false
+                "writable": true
             },
             "19": {
                 "id": 19,
                 "cluster_id": 291503114,
                 "label": "InterferenceRegionBitmask",
                 "type": "Optional[bytes]",
-                "writable": false
+                "writable": true
             },
             "20": {
                 "id": 20,
                 "cluster_id": 291503114,
                 "label": "EdgeRegionBitmask",
                 "type": "Optional[bytes]",
-                "writable": false
+                "writable": true
             },
             "22": {
                 "id": 22,

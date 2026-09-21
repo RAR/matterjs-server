@@ -88,16 +88,16 @@ class AqaraAmbientSensingConfigurationCluster(Cluster):
             def descriptor(cls) -> ClusterObjectDescriptor:
                 return ClusterObjectDescriptor(
                     Fields=[
-                        ClusterObjectFieldDescriptor(Label="zoneID", Tag=0, Type=typing.Optional[uint]),
-                        ClusterObjectFieldDescriptor(Label="zoneType", Tag=1, Type=typing.Optional[uint]),
-                        ClusterObjectFieldDescriptor(Label="cells", Tag=2, Type=typing.Optional[bytes]),
-                        ClusterObjectFieldDescriptor(Label="enabled", Tag=3, Type=typing.Optional[bool]),
+                        ClusterObjectFieldDescriptor(Label="zoneID", Tag=0, Type=uint),
+                        ClusterObjectFieldDescriptor(Label="zoneType", Tag=1, Type=uint),
+                        ClusterObjectFieldDescriptor(Label="cells", Tag=2, Type=bytes),
+                        ClusterObjectFieldDescriptor(Label="enabled", Tag=3, Type=bool),
                     ])
 
-            zoneID: typing.Optional[uint] = None
-            zoneType: typing.Optional[uint] = None
-            cells: typing.Optional[bytes] = None
-            enabled: typing.Optional[bool] = None
+            zoneID: uint = 0
+            zoneType: uint = 0
+            cells: bytes = b""
+            enabled: bool = False
 
     class Commands:
         @dataclass
@@ -125,10 +125,10 @@ class AqaraAmbientSensingConfigurationCluster(Cluster):
             def descriptor(cls) -> ClusterObjectDescriptor:
                 return ClusterObjectDescriptor(
                     Fields=[
-                        ClusterObjectFieldDescriptor(Label="timeout", Tag=0, Type=typing.Optional[uint]),
+                        ClusterObjectFieldDescriptor(Label="timeout", Tag=0, Type=uint),
                     ])
 
-            timeout: typing.Optional[uint] = None
+            timeout: uint = 0
 
         @dataclass
         class SubscribeAiEntryExitRegionRecognitionData(ClusterCommand):
@@ -169,10 +169,10 @@ class AqaraAmbientSensingConfigurationCluster(Cluster):
             def descriptor(cls) -> ClusterObjectDescriptor:
                 return ClusterObjectDescriptor(
                     Fields=[
-                        ClusterObjectFieldDescriptor(Label="zone", Tag=0, Type=typing.Optional[AqaraAmbientSensingConfigurationCluster.Structs.AqaraZoneStruct]),
+                        ClusterObjectFieldDescriptor(Label="zone", Tag=0, Type=AqaraAmbientSensingConfigurationCluster.Structs.AqaraZoneStruct),
                     ])
 
-            zone: typing.Optional[AqaraAmbientSensingConfigurationCluster.Structs.AqaraZoneStruct] = None
+            zone: AqaraAmbientSensingConfigurationCluster.Structs.AqaraZoneStruct = field(default_factory=lambda: AqaraAmbientSensingConfigurationCluster.Structs.AqaraZoneStruct())
 
         @dataclass
         class UpdateZone(ClusterCommand):
@@ -185,10 +185,10 @@ class AqaraAmbientSensingConfigurationCluster(Cluster):
             def descriptor(cls) -> ClusterObjectDescriptor:
                 return ClusterObjectDescriptor(
                     Fields=[
-                        ClusterObjectFieldDescriptor(Label="zone", Tag=0, Type=typing.Optional[AqaraAmbientSensingConfigurationCluster.Structs.AqaraZoneStruct]),
+                        ClusterObjectFieldDescriptor(Label="zone", Tag=0, Type=AqaraAmbientSensingConfigurationCluster.Structs.AqaraZoneStruct),
                     ])
 
-            zone: typing.Optional[AqaraAmbientSensingConfigurationCluster.Structs.AqaraZoneStruct] = None
+            zone: AqaraAmbientSensingConfigurationCluster.Structs.AqaraZoneStruct = field(default_factory=lambda: AqaraAmbientSensingConfigurationCluster.Structs.AqaraZoneStruct())
 
         @dataclass
         class RemoveZone(ClusterCommand):
@@ -201,10 +201,10 @@ class AqaraAmbientSensingConfigurationCluster(Cluster):
             def descriptor(cls) -> ClusterObjectDescriptor:
                 return ClusterObjectDescriptor(
                     Fields=[
-                        ClusterObjectFieldDescriptor(Label="zoneID", Tag=0, Type=typing.Optional[uint]),
+                        ClusterObjectFieldDescriptor(Label="zoneID", Tag=0, Type=uint),
                     ])
 
-            zoneID: typing.Optional[uint] = None
+            zoneID: uint = 0
 
         @dataclass
         class SetZones(ClusterCommand):
@@ -217,10 +217,10 @@ class AqaraAmbientSensingConfigurationCluster(Cluster):
             def descriptor(cls) -> ClusterObjectDescriptor:
                 return ClusterObjectDescriptor(
                     Fields=[
-                        ClusterObjectFieldDescriptor(Label="zones", Tag=0, Type=typing.Optional[typing.List[AqaraAmbientSensingConfigurationCluster.Structs.AqaraZoneStruct]]),
+                        ClusterObjectFieldDescriptor(Label="zones", Tag=0, Type=typing.List[AqaraAmbientSensingConfigurationCluster.Structs.AqaraZoneStruct]),
                     ])
 
-            zones: typing.Optional[typing.List[AqaraAmbientSensingConfigurationCluster.Structs.AqaraZoneStruct]] = None
+            zones: typing.List[AqaraAmbientSensingConfigurationCluster.Structs.AqaraZoneStruct] = field(default_factory=lambda: [])
 
         @dataclass
         class AppendZoneResponse(ClusterCommand):
@@ -233,10 +233,10 @@ class AqaraAmbientSensingConfigurationCluster(Cluster):
             def descriptor(cls) -> ClusterObjectDescriptor:
                 return ClusterObjectDescriptor(
                     Fields=[
-                        ClusterObjectFieldDescriptor(Label="status", Tag=0, Type=typing.Optional[uint]),
+                        ClusterObjectFieldDescriptor(Label="status", Tag=0, Type=uint),
                     ])
 
-            status: typing.Optional[uint] = None
+            status: uint = 0
 
         @dataclass
         class UpdateZoneResponse(ClusterCommand):
@@ -249,10 +249,10 @@ class AqaraAmbientSensingConfigurationCluster(Cluster):
             def descriptor(cls) -> ClusterObjectDescriptor:
                 return ClusterObjectDescriptor(
                     Fields=[
-                        ClusterObjectFieldDescriptor(Label="status", Tag=0, Type=typing.Optional[uint]),
+                        ClusterObjectFieldDescriptor(Label="status", Tag=0, Type=uint),
                     ])
 
-            status: typing.Optional[uint] = None
+            status: uint = 0
 
         @dataclass
         class RemoveZoneResponse(ClusterCommand):
@@ -265,10 +265,10 @@ class AqaraAmbientSensingConfigurationCluster(Cluster):
             def descriptor(cls) -> ClusterObjectDescriptor:
                 return ClusterObjectDescriptor(
                     Fields=[
-                        ClusterObjectFieldDescriptor(Label="status", Tag=0, Type=typing.Optional[uint]),
+                        ClusterObjectFieldDescriptor(Label="status", Tag=0, Type=uint),
                     ])
 
-            status: typing.Optional[uint] = None
+            status: uint = 0
 
         @dataclass
         class SetZonesResponse(ClusterCommand):
@@ -281,10 +281,10 @@ class AqaraAmbientSensingConfigurationCluster(Cluster):
             def descriptor(cls) -> ClusterObjectDescriptor:
                 return ClusterObjectDescriptor(
                     Fields=[
-                        ClusterObjectFieldDescriptor(Label="status", Tag=0, Type=typing.Optional[uint]),
+                        ClusterObjectFieldDescriptor(Label="status", Tag=0, Type=uint),
                     ])
 
-            status: typing.Optional[uint] = None
+            status: uint = 0
 
     class Attributes:
         @dataclass

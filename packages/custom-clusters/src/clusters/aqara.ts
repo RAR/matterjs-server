@@ -15,6 +15,7 @@ import {
     field,
     int16,
     listOf,
+    mandatory,
     octstr,
     response,
     uint8,
@@ -131,45 +132,45 @@ const enum AqaraZoneCommandStatus {
  */
 class AqaraZoneStruct {
     /** 1..8 */
-    @field(0x0, uint8)
+    @field(0x0, uint8, mandatory)
     zoneId!: number;
 
     /** Zone category chosen in the app (e.g. 51 for a desk zone); 0 works as a generic zone. */
-    @field(0x1, uint8)
+    @field(0x1, uint8, mandatory)
     zoneType!: number;
 
     /** 40 byte cell bitmask, see the grid description above. */
-    @field(0x2, octstr)
+    @field(0x2, octstr, mandatory)
     cells!: Bytes;
 
-    @field(0x3, bool)
+    @field(0x3, bool, mandatory)
     enabled!: boolean;
 }
 
 class AqaraZoneRequest {
-    @field(0x0, AqaraZoneStruct)
+    @field(0x0, AqaraZoneStruct, mandatory)
     zone!: AqaraZoneStruct;
 }
 
 class AqaraZoneIdRequest {
-    @field(0x0, uint8)
+    @field(0x0, uint8, mandatory)
     zoneId!: number;
 }
 
 class AqaraZonesRequest {
-    @field(0x0, listOf(AqaraZoneStruct))
+    @field(0x0, listOf(AqaraZoneStruct), mandatory)
     zones!: AqaraZoneStruct[];
 }
 
 class AqaraTimeoutRequest {
     /** Seconds the device keeps reporting. */
-    @field(0x0, uint16)
+    @field(0x0, uint16, mandatory)
     timeout!: number;
 }
 
 /** Result of a zone command; see {@link AqaraZoneCommandStatus}. */
 class AqaraZoneResponse {
-    @field(0x0, enum8)
+    @field(0x0, enum8, mandatory)
     status!: AqaraZoneCommandStatus;
 }
 
@@ -296,7 +297,7 @@ export class AqaraAmbientSensingConfigurationCluster {
 
 /** Motion event payload; see {@link AqaraMotionEvent}. */
 class AqaraMotionDetectedEvent {
-    @field(0x0, enum8)
+    @field(0x0, enum8, mandatory)
     motion!: AqaraMotionEvent;
 }
 
@@ -319,34 +320,34 @@ export class AqaraRadarSensingUnionCluster {
 
 /** One tracked person. */
 class AqaraTargetStruct {
-    @field(0x0, uint8)
+    @field(0x0, uint8, mandatory)
     targetId!: number;
 
     /** Sideways position in cm, negative to the left. */
-    @field(0x1, int16)
+    @field(0x1, int16, mandatory)
     x!: number;
 
     /** Distance from the sensor in cm. */
-    @field(0x2, int16)
+    @field(0x2, int16, mandatory)
     y!: number;
 
     /** Grid cell as `row << 8 | column`. */
-    @field(0x3, uint16)
+    @field(0x3, uint16, mandatory)
     cell!: number;
 
     /** See {@link AqaraActivityState}. */
-    @field(0x4, enum8)
+    @field(0x4, enum8, mandatory)
     activityState!: AqaraActivityState;
 
     /** See {@link AqaraFallState}. */
-    @field(0x5, enum8)
+    @field(0x5, enum8, mandatory)
     fallState!: AqaraFallState;
 
-    @field(0x6, uint8)
+    @field(0x6, uint8, mandatory)
     postureState!: number;
 
     /** Always observed as 255. */
-    @field(0x7, uint8)
+    @field(0x7, uint8, mandatory)
     zoneId!: number;
 
     /** Id of the zone the target is in. Only present while the target is inside a zone. */
@@ -355,12 +356,12 @@ class AqaraTargetStruct {
 }
 
 class AqaraLocationInfoEvent {
-    @field(0x0, listOf(AqaraTargetStruct))
+    @field(0x0, listOf(AqaraTargetStruct), mandatory)
     targets!: AqaraTargetStruct[];
 }
 
 class AqaraTargetIdRequest {
-    @field(0x0, uint8)
+    @field(0x0, uint8, mandatory)
     targetId!: number;
 }
 

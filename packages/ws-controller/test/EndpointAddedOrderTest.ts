@@ -91,7 +91,11 @@ describe("endpoint_added ordering", function () {
         await waitFor(() => received.some(msg => msg.event === "endpoint_added"));
 
         const events = received.filter(msg => typeof msg.event === "string").map(msg => msg.event);
-        expect(events.indexOf("node_updated")).to.be.lessThan(events.indexOf("endpoint_added"));
+        const snapshotIndex = events.indexOf("node_updated");
+        const endpointIndex = events.indexOf("endpoint_added");
+        expect(snapshotIndex, "node_updated was not sent").to.be.at.least(0);
+        expect(endpointIndex, "endpoint_added was not sent").to.be.at.least(0);
+        expect(snapshotIndex).to.be.lessThan(endpointIndex);
     });
 });
 

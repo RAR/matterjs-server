@@ -46,25 +46,25 @@ class AqaraOccupantLocationCluster(Cluster):
             def descriptor(cls) -> ClusterObjectDescriptor:
                 return ClusterObjectDescriptor(
                     Fields=[
-                        ClusterObjectFieldDescriptor(Label="targetID", Tag=0, Type=typing.Optional[uint]),
-                        ClusterObjectFieldDescriptor(Label="x", Tag=1, Type=typing.Optional[int]),
-                        ClusterObjectFieldDescriptor(Label="y", Tag=2, Type=typing.Optional[int]),
-                        ClusterObjectFieldDescriptor(Label="cell", Tag=3, Type=typing.Optional[uint]),
-                        ClusterObjectFieldDescriptor(Label="activityState", Tag=4, Type=typing.Optional[uint]),
-                        ClusterObjectFieldDescriptor(Label="fallState", Tag=5, Type=typing.Optional[uint]),
-                        ClusterObjectFieldDescriptor(Label="postureState", Tag=6, Type=typing.Optional[uint]),
-                        ClusterObjectFieldDescriptor(Label="zoneID", Tag=7, Type=typing.Optional[uint]),
+                        ClusterObjectFieldDescriptor(Label="targetID", Tag=0, Type=uint),
+                        ClusterObjectFieldDescriptor(Label="x", Tag=1, Type=int),
+                        ClusterObjectFieldDescriptor(Label="y", Tag=2, Type=int),
+                        ClusterObjectFieldDescriptor(Label="cell", Tag=3, Type=uint),
+                        ClusterObjectFieldDescriptor(Label="activityState", Tag=4, Type=uint),
+                        ClusterObjectFieldDescriptor(Label="fallState", Tag=5, Type=uint),
+                        ClusterObjectFieldDescriptor(Label="postureState", Tag=6, Type=uint),
+                        ClusterObjectFieldDescriptor(Label="zoneID", Tag=7, Type=uint),
                         ClusterObjectFieldDescriptor(Label="inZoneID", Tag=8, Type=typing.Optional[uint]),
                     ])
 
-            targetID: typing.Optional[uint] = None
-            x: typing.Optional[int] = None
-            y: typing.Optional[int] = None
-            cell: typing.Optional[uint] = None
-            activityState: typing.Optional[uint] = None
-            fallState: typing.Optional[uint] = None
-            postureState: typing.Optional[uint] = None
-            zoneID: typing.Optional[uint] = None
+            targetID: uint = 0
+            x: int = 0
+            y: int = 0
+            cell: uint = 0
+            activityState: uint = 0
+            fallState: uint = 0
+            postureState: uint = 0
+            zoneID: uint = 0
             inZoneID: typing.Optional[uint] = None
 
     class Commands:
@@ -79,10 +79,10 @@ class AqaraOccupantLocationCluster(Cluster):
             def descriptor(cls) -> ClusterObjectDescriptor:
                 return ClusterObjectDescriptor(
                     Fields=[
-                        ClusterObjectFieldDescriptor(Label="timeout", Tag=0, Type=typing.Optional[uint]),
+                        ClusterObjectFieldDescriptor(Label="timeout", Tag=0, Type=uint),
                     ])
 
-            timeout: typing.Optional[uint] = None
+            timeout: uint = 0
 
         @dataclass
         class RemoveDetectionTarget(ClusterCommand):
@@ -95,10 +95,10 @@ class AqaraOccupantLocationCluster(Cluster):
             def descriptor(cls) -> ClusterObjectDescriptor:
                 return ClusterObjectDescriptor(
                     Fields=[
-                        ClusterObjectFieldDescriptor(Label="targetID", Tag=0, Type=typing.Optional[uint]),
+                        ClusterObjectFieldDescriptor(Label="targetID", Tag=0, Type=uint),
                     ])
 
-            targetID: typing.Optional[uint] = None
+            targetID: uint = 0
 
     class Attributes:
         @dataclass
@@ -228,7 +228,7 @@ class AqaraOccupantLocationCluster(Cluster):
             def descriptor(cls) -> ClusterObjectDescriptor:
                 return ClusterObjectDescriptor(
                     Fields=[
-                        ClusterObjectFieldDescriptor(Label="targets", Tag=0, Type=typing.Optional[typing.List[AqaraOccupantLocationCluster.Structs.AqaraTargetStruct]]),
+                        ClusterObjectFieldDescriptor(Label="targets", Tag=0, Type=typing.List[AqaraOccupantLocationCluster.Structs.AqaraTargetStruct]),
                     ])
 
-            targets: typing.Optional[typing.List[AqaraOccupantLocationCluster.Structs.AqaraTargetStruct]] = None
+            targets: typing.List[AqaraOccupantLocationCluster.Structs.AqaraTargetStruct] = field(default_factory=lambda: [])

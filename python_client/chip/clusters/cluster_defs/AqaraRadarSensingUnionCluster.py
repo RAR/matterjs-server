@@ -185,7 +185,7 @@ class AqaraRadarSensingUnionCluster(Cluster):
             def descriptor(cls) -> ClusterObjectDescriptor:
                 return ClusterObjectDescriptor(
                     Fields=[
-                        ClusterObjectFieldDescriptor(Label="motion", Tag=0, Type=typing.Optional[uint]),
+                        ClusterObjectFieldDescriptor(Label="motion", Tag=0, Type=uint),
                     ])
 
-            motion: typing.Optional[uint] = None
+            motion: uint = 0

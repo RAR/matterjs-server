@@ -223,7 +223,10 @@ def test_aqara_fp400_clusters():
     assert location.id == 0x115FFC0C
     assert location.Attributes.ActivityState.attribute_id == 0x0007
     target = location.Structs.AqaraTargetStruct
-    assert target.descriptor.GetFieldByLabel("x").Type == (int | None)
+    # required fields are plain (signed) types; only inZoneID is optional
+    assert target.descriptor.GetFieldByLabel("x").Type is int
+    assert target.descriptor.GetFieldByLabel("inZoneID").Type == (uint | None)
+    assert zone.descriptor.GetFieldByLabel("cells").Type is bytes
     event = location.Events.LocationInfo(
         targets=[target(targetID=uint(0), x=-5, y=228, cell=uint(1032))]
     )
