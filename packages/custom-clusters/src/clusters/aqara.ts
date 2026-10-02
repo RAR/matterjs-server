@@ -23,9 +23,7 @@ import {
     writable,
 } from "@matter/main/model";
 
-// Enumerations. Declared as `const enum`s so the wire encoding stays a plain 8-bit value while the symbolic mapping
-// lives alongside the cluster. Names and integer values follow the Aqara app's device model (trait definitions);
-// values were confirmed against firmware 1.1.9.6.
+// Enum names and values follow the Aqara app's device model (trait definitions), confirmed against firmware 1.1.9.6.
 
 /** {@link AqaraAmbientSensingConfigurationCluster.installMode} values (InstallMode trait). */
 const enum AqaraInstallMode {
@@ -375,8 +373,8 @@ export class AqaraOccupantLocationCluster {
     activityState?: AqaraActivityState;
 
     /**
-     * Streams {@link locationInfo} events (~7 per second while people move) for the given number of seconds
-     * (max 3600). Without a subscription the event is only emitted when a target appears or disappears.
+     * Streams {@link AqaraOccupantLocationCluster.locationInfo} events (~7 per second while people move) for the given
+     * number of seconds (max 3600). Without a subscription the event is only emitted when a target appears or disappears.
      */
     @command(0x00, AqaraTimeoutRequest)
     subscribeLocationData(_request: AqaraTimeoutRequest): void {}

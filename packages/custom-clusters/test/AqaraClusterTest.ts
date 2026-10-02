@@ -34,6 +34,15 @@ describe("Aqara FP400 clusters", () => {
         ]);
     });
 
+    it("marks the install settings and region bitmasks writable", () => {
+        const writable = [...cluster(0x115ffc0a).attributes]
+            .filter(attribute => attribute.writable)
+            .map(attribute => attribute.id);
+
+        expect(writable).to.include.members([0x0000, 0x0002, 0x0004, 0x0012, 0x0013, 0x0014]);
+        expect(writable).to.not.include(0x0016);
+    });
+
     it("types the zone list as a list of zone structs", () => {
         const zones = [...cluster(0x115ffc0a).attributes].find(attribute => attribute.name === "zones");
 

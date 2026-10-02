@@ -4,8 +4,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-// Registers the custom cluster models before the ClusterMap is built
-import "@matter-server/custom-clusters";
 import {
     ClusterMap,
     GlobalAttributes,
@@ -1233,7 +1231,7 @@ describe("Converters", () => {
         });
     });
 
-    describe("convertCommandDataToMatter - decorator-defined custom clusters", () => {
+    describe("decorator-defined custom clusters", () => {
         it("should convert a list of structs with base64 bytes for the Aqara SetZones command", () => {
             const aqaraCluster = ClusterMap[0x115ffc0a]!;
             const setZonesCmd = aqaraCluster.commands["setzones"]!;
@@ -1270,6 +1268,51 @@ describe("Converters", () => {
             expect(result).to.have.length(1);
             expect(result[0].zoneId).to.equal(1);
             expect(result[0].cells).to.equal(Bytes.toBase64(cells));
+        });
+
+        it("should convert a tag-keyed Aqara zones list to matter.js values with bytes", () => {
+            const aqaraCluster = ClusterMap[0x115ffc0a]!;
+            const zonesAttr = aqaraCluster.attributes[0x10]!;
+            const cells = new Uint8Array(40);
+            cells[11] = 0xc0;
+
+            const result = convertWebSocketTagBasedToMatter(
+                [{ "0": 1, "1": 0, "2": Bytes.toBase64(cells), "3": true }],
+                zonesAttr,
+                aqaraCluster.model,
+            );
+
+            expect(result).to.deep.equal([{ zoneId: 1, zoneType: 0, cells, enabled: true }]);
+        });
+
+        it("should tag-key the Aqara zones attribute for attribute updates", () => {
+            const aqaraCluster = ClusterMap[0x115ffc0a]!;
+            const zonesAttr = aqaraCluster.attributes[0x10]!;
+            const cells = new Uint8Array(40);
+            cells[11] = 0xc0;
+
+            const result = convertMatterToWebSocketTagBased(
+                [{ zoneId: 1, zoneType: 0, cells, enabled: true }],
+                zonesAttr,
+                aqaraCluster.model,
+            );
+
+            expect(result).to.deep.equal([{ "0": 1, "1": 0, "2": Bytes.toBase64(cells), "3": true }]);
+        });
+    });
+
+    describe("convertMatterToWebSocketTagBased - derived Mode clusters", () => {
+        it("should tag-key SupportedModes inherited from ModeBase", () => {
+            const rvcRunMode = ClusterMap[0x54]!;
+            const supportedModes = rvcRunMode.attributes[0x0]!;
+
+            const result = convertMatterToWebSocketTagBased(
+                [{ label: "Idle", mode: 0, modeTags: [{ value: 16384 }] }],
+                supportedModes,
+                rvcRunMode.model,
+            );
+
+            expect(result).to.deep.equal([{ "0": "Idle", "1": 0, "2": [{ "1": 16384 }] }]);
         });
     });
 });
